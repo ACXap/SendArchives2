@@ -9,7 +9,7 @@ namespace SendArchives.Email
 {
     public class EmailService : IEmailService
     {
-        private const string emailDomen = "@*****.**";      //тут ваш почтовый домен
+        private const string emailDomen = "@*****.**";     \\тут ваш почтовый домен и поменять \\ на //
 
         private CancellationTokenSource cts;
 
