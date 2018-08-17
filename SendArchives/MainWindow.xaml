@@ -1,0 +1,860 @@
+﻿<Controls:MetroWindow
+    x:Class="SendArchives.MainWindow"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:Controls="clr-namespace:MahApps.Metro.Controls;assembly=MahApps.Metro"
+    xmlns:Converters="clr-namespace:SendArchives.Converters"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:local="clr-namespace:SendArchives"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    x:Name="mainwin"
+    Title="{DynamicResource TitleMainWindow}"
+    Width="1000"
+    Height="600"
+    BorderBrush="{DynamicResource AccentColorBrush}"
+    BorderThickness="1"
+    IconTemplate="{StaticResource MainIcon}"
+    WindowStartupLocation="CenterScreen"
+    mc:Ignorable="d">
+    <Controls:MetroWindow.Resources>
+        <Converters:ConverterBoolInvers x:Key="ConverterBoolInvers" />
+        <Converters:ConverterCollectionFilesToTotalSize x:Key="ConverterCollectionFilesToTotalSize" />
+        <Converters:ConverterFileToIconImage x:Key="ConverterFileToIconImage" />
+        <Converters:ConverterSizeFileToMbyte x:Key="ConverterSizeFileToMbyte" />
+        <Converters:ConverterNullToVisibility x:Key="ConverterNullToVisibility" />
+        <Converters:ConverterNullToBool x:Key="ConverterNullToBool" />
+        <Converters:ConverterBoolToVisibility x:Key="ConverterBoolToVisibility" />
+        <Converters:ConverterTabIndexToEnum x:Key="ConverterTabIndexToEnum" />
+    </Controls:MetroWindow.Resources>
+    <Controls:MetroWindow.WindowButtonCommands>
+        <Controls:WindowButtonCommands
+            Close="{DynamicResource MainWindowClose}"
+            Maximize="{DynamicResource MainWindowMaximize}"
+            Minimize="{DynamicResource MainWindowMinimize}"
+            Restore="{DynamicResource MainWindowRestore}" />
+    </Controls:MetroWindow.WindowButtonCommands>
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition />
+            <RowDefinition Height="25" />
+        </Grid.RowDefinitions>
+        <TabControl
+            Grid.Row="0"
+            Controls:TabControlHelper.Underlined="SelectedTabItem"
+            SelectedIndex="{Binding TabIndexSelected, Converter={StaticResource ConverterTabIndexToEnum}, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}">
+            <TabItem Header="{DynamicResource FormEmails}">
+                <Grid>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="100" />
+                        <RowDefinition Height="*" />
+                    </Grid.RowDefinitions>
+                    <Grid Grid.Row="0">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="160" />
+                            <ColumnDefinition Width="*" />
+                        </Grid.ColumnDefinitions>
+                        <Button
+                            Grid.Column="0"
+                            Margin="5"
+                            Command="{Binding CommandSendEmail}">
+                            <TextBlock Style="{StaticResource TextBlockStyleEmail}" Text="{DynamicResource SendEmail}" />
+                        </Button>
+                        <Grid Grid.Column="1">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="70" />
+                                <ColumnDefinition Width="*" />
+                            </Grid.ColumnDefinitions>
+                            <Grid.RowDefinitions>
+                                <RowDefinition />
+                                <RowDefinition />
+                            </Grid.RowDefinitions>
+                            <TextBlock
+                                Grid.Row="0"
+                                Grid.Column="0"
+                                Style="{StaticResource TextBlockStyleEmail}"
+                                Text="{DynamicResource ToEmail}" />
+                            <TextBox
+                                Grid.Row="0"
+                                Grid.Column="1"
+                                Controls:TextBoxHelper.Watermark="{DynamicResource ToEmailWatermark}"
+                                Style="{StaticResource TextBoxStyleEmail}"
+                                Text="{Binding EmailViewModel.Recipients, UpdateSourceTrigger=PropertyChanged}" />
+                            <TextBlock
+                                Grid.Row="1"
+                                Grid.Column="0"
+                                Style="{StaticResource TextBlockStyleEmail}"
+                                Text="{DynamicResource SubjectEmail}" />
+                            <TextBox
+                                Grid.Row="1"
+                                Grid.Column="2"
+                                Controls:TextBoxHelper.Watermark="{DynamicResource SubjectEmailWatermark}"
+                                Style="{StaticResource TextBoxStyleEmail}"
+                                Text="{Binding EmailViewModel.SubjectFirstEmail, UpdateSourceTrigger=PropertyChanged}" />
+                        </Grid>
+                    </Grid>
+                    <Grid Grid.Row="1">
+                        <Grid.RowDefinitions>
+                            <RowDefinition />
+                            <RowDefinition Height="Auto" />
+                        </Grid.RowDefinitions>
+                        <GroupBox Grid.Row="0" Header="{DynamicResource FirstEmail}">
+                            <Grid>
+                                <Grid.RowDefinitions>
+                                    <RowDefinition Height="*" />
+                                    <RowDefinition Height="Auto" />
+                                </Grid.RowDefinitions>
+                                <TextBox
+                                    Grid.Row="0"
+                                    Controls:TextBoxHelper.Watermark="{DynamicResource MessageFirstEmailWatermark}"
+                                    Style="{StaticResource TextBoxStyleMessageEmail}"
+                                    Text="{Binding EmailViewModel.TextFirstEmail, UpdateSourceTrigger=PropertyChanged}" />
+                                <GroupBox
+                                    Grid.Row="1"
+                                    Header="{DynamicResource Signature}"
+                                    Visibility="{Binding IsChecked, Converter={StaticResource ConverterBoolToVisibility}, ElementName=chboxCanUseSignature}">
+                                    <TextBox
+                                        MaxLines="8"
+                                        Style="{StaticResource TextBoxStyleMessageEmail}"
+                                        Text="{Binding EmailSignatureViewModel.CurrentEmailSignatureText, UpdateSourceTrigger=PropertyChanged}" />
+                                </GroupBox>
+                            </Grid>
+                        </GroupBox>
+                        <Expander
+                            Grid.Row="1"
+                            Header="{DynamicResource NextEmail}"
+                            IsExpanded="True"
+                            Visibility="{Binding IsChecked, Converter={StaticResource ConverterBoolToVisibility}, ElementName=chboxCanChangeSubject}">
+                            <Grid>
+                                <Grid.RowDefinitions>
+                                    <RowDefinition Height="Auto" />
+                                    <RowDefinition />
+                                </Grid.RowDefinitions>
+                                <Grid Grid.Row="0">
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="Auto" />
+                                        <ColumnDefinition Width="10" />
+                                        <ColumnDefinition Width="*" />
+                                    </Grid.ColumnDefinitions>
+                                    <TextBlock
+                                        Grid.Row="1"
+                                        Grid.Column="0"
+                                        Style="{StaticResource TextBlockStyleEmail}"
+                                        Text="{DynamicResource SubjectEmail}" />
+                                    <TextBox
+                                        Grid.Row="1"
+                                        Grid.Column="2"
+                                        Controls:TextBoxHelper.ClearTextButton="True"
+                                        Controls:TextBoxHelper.Watermark="{DynamicResource SubjectNextEmailWatermark}"
+                                        Style="{StaticResource TextBoxStyleEmail}"
+                                        Text="{Binding EmailViewModel.SubjectNextEmail, UpdateSourceTrigger=PropertyChanged}" />
+                                </Grid>
+                                <TextBox
+                                    Grid.Row="1"
+                                    Controls:TextBoxHelper.Watermark="{DynamicResource MessageNextEmailWatermark}"
+                                    MaxLines="10"
+                                    MinLines="3"
+                                    Style="{StaticResource TextBoxStyleMessageEmail}"
+                                    Text="{Binding EmailViewModel.TextNextEmail, UpdateSourceTrigger=PropertyChanged}" />
+                            </Grid>
+                        </Expander>
+                    </Grid>
+                </Grid>
+            </TabItem>
+            <TabItem Header="{DynamicResource FormFiles}">
+                <Grid>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="auto" />
+                        <ColumnDefinition Width="10" />
+                        <ColumnDefinition Width="*" />
+                    </Grid.ColumnDefinitions>
+                    <Grid Grid.Column="0" Visibility="{Binding IsChecked, Converter={StaticResource ConverterBoolToVisibility}, ElementName=chboxUsePassword}">
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="*" />
+                            <RowDefinition Height="auto" />
+                        </Grid.RowDefinitions>
+                        <GroupBox
+                            Grid.Row="0"
+                            Width="170"
+                            Margin="1,0"
+                            Header="{DynamicResource FormArchives}">
+                            <StackPanel Grid.Column="0" Orientation="Vertical">
+                                <TextBlock Text="{DynamicResource NameArchive}" />
+                                <TextBox Text="{Binding ZipViewModel.NameArchive}" />
+                                <TextBlock Text="{DynamicResource Password}" />
+                                <Grid>
+                                    <TextBox Text="{Binding ZipViewModel.Password}" />
+                                    <Button
+                                        Width="25"
+                                        Height="25"
+                                        Margin="1"
+                                        Padding="2"
+                                        HorizontalAlignment="Right"
+                                        Command="{Binding ZipViewModel.CommandGetRandomPassword}"
+                                        Content="{StaticResource ImageRandomPassword}"
+                                        Cursor="Hand"
+                                        ToolTip="{DynamicResource PasswordRandom}" />
+                                </Grid>
+                                <TextBlock Text="{DynamicResource SizePart}" />
+                                <TextBox Text="{Binding ZipViewModel.SizePart, UpdateSourceTrigger=PropertyChanged}" Validation.ErrorTemplate="{StaticResource ValidationSizePart}" />
+                                <Button Command="{Binding CommandGetArchive}" Content="{DynamicResource FormArchivesButton}">
+                                    <Button.Style>
+                                        <Style BasedOn="{StaticResource MetroButton}" TargetType="Button">
+                                            <Setter Property="IsEnabled" Value="True" />
+                                            <Style.Triggers>
+                                                <DataTrigger Binding="{Binding FilesViewModel.CollectionFiles.Count}" Value="0">
+                                                    <Setter Property="IsEnabled" Value="False" />
+                                                </DataTrigger>
+                                                <DataTrigger Binding="{Binding FilesViewModel.CollectionFiles}" Value="{x:Null}">
+                                                    <Setter Property="IsEnabled" Value="False" />
+                                                </DataTrigger>
+                                                <DataTrigger Binding="{Binding ZipViewModel.IsCreatedArchive}" Value="True">
+                                                    <Setter Property="IsEnabled" Value="False" />
+                                                </DataTrigger>
+                                            </Style.Triggers>
+                                        </Style>
+                                    </Button.Style>
+                                </Button>
+                                <StackPanel Orientation="Vertical">
+                                    <StackPanel.Style>
+                                        <Style TargetType="{x:Type StackPanel}">
+                                            <Setter Property="Visibility" Value="Collapsed" />
+                                            <Style.Triggers>
+                                                <DataTrigger Binding="{Binding ZipViewModel.IsCreatedArchive}" Value="True">
+                                                    <Setter Property="Visibility" Value="Visible" />
+                                                </DataTrigger>
+                                            </Style.Triggers>
+                                        </Style>
+                                    </StackPanel.Style>
+                                    <Controls:ProgressRing x:Name="progressFormArchive" IsActive="True" />
+                                    <Button Command="{Binding ZipViewModel.CommandCancelSaveArchive}" Content="{DynamicResource FormCancelArchivesButton}" />
+                                </StackPanel>
+                            </StackPanel>
+                        </GroupBox>
+                        <GroupBox
+                            Grid.Row="1"
+                            Width="170"
+                            Margin="1,0"
+                            Header="{DynamicResource GroupFile}">
+                            <StackPanel Orientation="Vertical">
+                                <TextBlock Text="{DynamicResource GroupFileDescription}" TextWrapping="Wrap" />
+                                <Separator />
+                                <TextBlock Text="{DynamicResource MaxSizeLatter}" />
+                                <TextBox Text="{Binding FilesViewModel.MaxSize, UpdateSourceTrigger=PropertyChanged}" />
+                                <Button Command="{Binding FilesViewModel.CommandGroupFiles}" Content="{DynamicResource GroupFile}" />
+                            </StackPanel>
+                        </GroupBox>
+                    </Grid>
+                    <ToggleButton
+                        Grid.Column="1"
+                        Height="50"
+                        Padding="0"
+                        IsChecked="{Binding Path=IsChecked, ElementName=chboxUsePassword}">
+                        <ToggleButton.Style>
+                            <Style BasedOn="{StaticResource MetroToggleButton}" TargetType="ToggleButton">
+                                <Setter Property="Content" Value="&lt;" />
+                                <Style.Triggers>
+                                    <Trigger Property="IsChecked" Value="false">
+                                        <Setter Property="Content" Value="&gt;" />
+                                    </Trigger>
+                                </Style.Triggers>
+                            </Style>
+                        </ToggleButton.Style>
+                    </ToggleButton>
+                    <GroupBox
+                        Grid.Column="2"
+                        Margin="1,0,0,0"
+                        Header="{DynamicResource ListFiles}"
+                        IsEnabled="{Binding ZipViewModel.IsCreatedArchive, Converter={StaticResource ConverterBoolInvers}, TargetNullValue=True}">
+                        <GroupBox.HeaderTemplate>
+                            <DataTemplate>
+                                <Grid>
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="Auto" />
+                                        <ColumnDefinition />
+                                        <ColumnDefinition Width="Auto" />
+                                    </Grid.ColumnDefinitions>
+                                    <TextBlock VerticalAlignment="Center" Text="{Binding}" />
+                                    <StackPanel
+                                        Grid.Column="2"
+                                        HorizontalAlignment="Right"
+                                        Orientation="Horizontal">
+                                        <Button
+                                            Margin="5,0"
+                                            Command="{Binding DataContext.FilesViewModel.CommandAddFilesToCollection, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type local:MainWindow}}}"
+                                            Content="{DynamicResource SelectFiles}" />
+                                        <Button Command="{Binding DataContext.FilesViewModel.CommandClearCollection, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type local:MainWindow}}}" Content="{DynamicResource ClearList}" />
+                                    </StackPanel>
+                                </Grid>
+                            </DataTemplate>
+                        </GroupBox.HeaderTemplate>
+                        <Grid>
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="*" />
+                                <RowDefinition Height="auto" />
+                            </Grid.RowDefinitions>
+                            <DataGrid
+                                Grid.Row="0"
+                                AutoGenerateColumns="False"
+                                CanUserAddRows="False"
+                                HeadersVisibility="Column"
+                                IsReadOnly="True"
+                                IsSynchronizedWithCurrentItem="True"
+                                ItemsSource="{Binding FilesViewModel.CVFiles}">
+                                <DataGrid.Resources>
+                                    <ContextMenu x:Key="RowMenu" DataContext="{Binding DataContext.FilesViewModel, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type local:MainWindow}}}">
+                                        <MenuItem
+                                            Command="{Binding CommandUnGroup}"
+                                            Header="{DynamicResource UnGroup}"
+                                            Visibility="{Binding IsGrouped, Converter={StaticResource ConverterBoolToVisibility}}" />
+                                        <Separator Visibility="{Binding IsGrouped, Converter={StaticResource ConverterBoolToVisibility}}" />
+                                        <MenuItem
+                                            Command="{Binding CommandOpenFolderFile}"
+                                            CommandParameter="{Binding CollectionFiles/FullName}"
+                                            Header="{DynamicResource OpenRepositoryFile}" />
+                                        <Separator />
+                                        <MenuItem
+                                            Command="{Binding CommandRemoveFileFromCollection}"
+                                            CommandParameter="{Binding CollectionFiles/}"
+                                            Header="{DynamicResource RemoveFile}" />
+                                    </ContextMenu>
+                                </DataGrid.Resources>
+                                <DataGrid.RowStyle>
+                                    <Style BasedOn="{StaticResource MetroDataGridRow}" TargetType="{x:Type DataGridRow}">
+                                        <Setter Property="ContextMenu" Value="{StaticResource RowMenu}" />
+                                    </Style>
+                                </DataGrid.RowStyle>
+                                <DataGrid.GroupStyle>
+                                    <GroupStyle>
+                                        <GroupStyle.ContainerStyle>
+                                            <Style TargetType="{x:Type GroupItem}">
+                                                <Setter Property="Margin" Value="0,0,0,5" />
+                                                <Setter Property="Template">
+                                                    <Setter.Value>
+                                                        <ControlTemplate TargetType="{x:Type GroupItem}">
+                                                            <Expander IsExpanded="True">
+                                                                <Expander.Header>
+                                                                    <DockPanel>
+                                                                        <TextBlock
+                                                                            Margin="5,0,0,0"
+                                                                            FontWeight="Bold"
+                                                                            Text="Письмо: " />
+                                                                        <TextBlock Text="{Binding Path=Name}" />
+                                                                        <TextBlock
+                                                                            Margin="20,0,0,0"
+                                                                            FontWeight="Bold"
+                                                                            Text="Количество элементов: " />
+                                                                        <TextBlock Text="{Binding Path=ItemCount}" />
+                                                                    </DockPanel>
+                                                                </Expander.Header>
+                                                                <ItemsPresenter />
+                                                            </Expander>
+                                                        </ControlTemplate>
+                                                    </Setter.Value>
+                                                </Setter>
+                                            </Style>
+                                        </GroupStyle.ContainerStyle>
+                                    </GroupStyle>
+                                </DataGrid.GroupStyle>
+                                <DataGrid.Columns>
+                                    <DataGridTemplateColumn Width="*">
+                                        <DataGridTemplateColumn.Header>
+                                            <TextBlock Text="{DynamicResource NameFile}" />
+                                        </DataGridTemplateColumn.Header>
+                                        <DataGridTemplateColumn.CellTemplate>
+                                            <DataTemplate>
+                                                <StackPanel Orientation="Horizontal">
+                                                    <Image Height="25" Source="{Binding FullName, Converter={StaticResource ConverterFileToIconImage}}" />
+                                                    <TextBlock
+                                                        Margin="5,0,0,0"
+                                                        VerticalAlignment="Center"
+                                                        Text="{Binding Name}"
+                                                        TextWrapping="Wrap" />
+                                                </StackPanel>
+                                            </DataTemplate>
+                                        </DataGridTemplateColumn.CellTemplate>
+                                    </DataGridTemplateColumn>
+                                    <DataGridTemplateColumn Width="*">
+                                        <DataGridTemplateColumn.Header>
+                                            <TextBlock Text="{DynamicResource PathFile}" />
+                                        </DataGridTemplateColumn.Header>
+                                        <DataGridTemplateColumn.CellTemplate>
+                                            <DataTemplate>
+                                                <TextBlock Text="{Binding FullName}" TextWrapping="Wrap" />
+                                            </DataTemplate>
+                                        </DataGridTemplateColumn.CellTemplate>
+                                    </DataGridTemplateColumn>
+                                    <DataGridTemplateColumn Width="auto">
+                                        <DataGridTemplateColumn.Header>
+                                            <TextBlock HorizontalAlignment="Center" Text="{DynamicResource SizeFile}" />
+                                        </DataGridTemplateColumn.Header>
+                                        <DataGridTemplateColumn.CellTemplate>
+                                            <DataTemplate>
+                                                <TextBlock Margin="0,0,10,0" HorizontalAlignment="Right">
+                                                    <Run Text="{Binding Size, Converter={StaticResource ConverterSizeFileToMbyte}, StringFormat=\{0:# ### ###\}}" />
+                                                    <Run Text="{DynamicResource SizeKb}" />
+                                                </TextBlock>
+                                            </DataTemplate>
+                                        </DataGridTemplateColumn.CellTemplate>
+                                    </DataGridTemplateColumn>
+                                    <DataGridTemplateColumn Width="25">
+                                        <DataGridTemplateColumn.CellTemplate>
+                                            <DataTemplate>
+                                                <Button
+                                                    Height="20"
+                                                    Command="{Binding DataContext.FilesViewModel.CommandRemoveFileFromCollection, ElementName=mainwin}"
+                                                    CommandParameter="{Binding}"
+                                                    ContentTemplate="{StaticResource DelFileCommand}"
+                                                    ToolTip="{DynamicResource RemoveFile}" />
+                                            </DataTemplate>
+                                        </DataGridTemplateColumn.CellTemplate>
+                                    </DataGridTemplateColumn>
+                                </DataGrid.Columns>
+                            </DataGrid>
+                            <Border
+                                Grid.Row="1"
+                                BorderBrush="AliceBlue"
+                                BorderThickness="2">
+                                <Grid>
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="auto" />
+                                        <ColumnDefinition Width="*" />
+                                        <ColumnDefinition Width="auto" />
+                                    </Grid.ColumnDefinitions>
+                                    <StackPanel
+                                        Grid.Column="0"
+                                        Margin="40,0,0,0"
+                                        Orientation="Horizontal">
+                                        <TextBlock Style="{StaticResource TextBlockStyleEmail}" Text="{DynamicResource TotalFiles}" />
+                                        <TextBlock
+                                            Margin="10,0,0,0"
+                                            Style="{StaticResource TextBlockStyleEmail}"
+                                            Text="{Binding FilesViewModel.CollectionFiles.Count, FallbackValue=0, TargetNullValue=0}" />
+                                    </StackPanel>
+                                    <StackPanel
+                                        Grid.Column="1"
+                                        HorizontalAlignment="Center"
+                                        Orientation="Horizontal">
+                                        <TextBlock Style="{StaticResource TextBlockStyleEmail}" Text="{DynamicResource TotalGroup}" />
+                                        <TextBlock Margin="10,0,0,0">
+                                            <TextBlock.Style>
+                                                <Style BasedOn="{StaticResource TextBlockStyleEmail}" TargetType="TextBlock">
+                                                    <Setter Property="Text" Value="{Binding FilesViewModel.CollectionFiles.Count, FallbackValue=0}" />
+                                                    <Style.Triggers>
+                                                        <DataTrigger Binding="{Binding FilesViewModel.IsGrouped}" Value="True">
+                                                            <Setter Property="Text" Value="{Binding FilesViewModel.CountGroup}" />
+                                                        </DataTrigger>
+                                                    </Style.Triggers>
+                                                </Style>
+                                            </TextBlock.Style>
+                                        </TextBlock>
+                                    </StackPanel>
+                                    <StackPanel
+                                        Grid.Column="2"
+                                        Margin="0,0,40,0"
+                                        Orientation="Horizontal">
+                                        <TextBlock Style="{StaticResource TextBlockStyleEmail}" Text="{DynamicResource TotalSize}" />
+                                        <TextBlock Margin="10,0,0,0" Style="{StaticResource TextBlockStyleEmail}">
+                                            <Run>
+                                                <Run.Text>
+                                                    <MultiBinding
+                                                        Converter="{StaticResource ConverterCollectionFilesToTotalSize}"
+                                                        FallbackValue="0"
+                                                        Mode="OneWay"
+                                                        TargetNullValue="0">
+                                                        <Binding Path="FilesViewModel.CollectionFiles" />
+                                                        <Binding Path="FilesViewModel.CollectionFiles.Count" />
+                                                    </MultiBinding>
+                                                </Run.Text>
+                                            </Run>
+                                            <Run Text="{DynamicResource SizeMb}" />
+                                        </TextBlock>
+                                    </StackPanel>
+                                </Grid>
+                            </Border>
+                        </Grid>
+                    </GroupBox>
+                </Grid>
+            </TabItem>
+            <TabItem Header="{DynamicResource Result}">
+                <Grid>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto" />
+                        <RowDefinition />
+                    </Grid.RowDefinitions>
+                    <Grid Grid.Row="0">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="Auto" />
+                            <ColumnDefinition />
+                            <ColumnDefinition Width="Auto" />
+                        </Grid.ColumnDefinitions>
+                        <Button
+                            Width="200"
+                            Height="60"
+                            Margin="5"
+                            Command="{Binding EmailViewModel.CommandCancelSend}">
+                            <TextBlock Style="{StaticResource TextBlockStyleEmail}" Text="{DynamicResource CancelSendEmail}" />
+                        </Button>
+                        <Controls:ProgressRing Grid.Column="1" IsActive="{Binding EmailViewModel.IsStartedSending}" />
+                        <TextBlock
+                            Grid.Column="2"
+                            FontSize="30"
+                            Style="{StaticResource TextBlockStyleEmail}"><Run Text="{DynamicResource Processed}" /><Run Text=" " /><Run Text="{Binding EmailViewModel.IdProcessed, FallbackValue=0, Mode=OneWay, TargetNullValue=0}" /><Run Text=" " /><Run Text="{DynamicResource ProcessedOf}" /><Run Text=" " /><Run Text="{Binding EmailViewModel.CollectionMessage.Count, FallbackValue=0, Mode=OneWay, TargetNullValue=0}" /></TextBlock>
+                    </Grid>
+                    <DataGrid
+                        Grid.Row="1"
+                        AutoGenerateColumns="False"
+                        CanUserAddRows="False"
+                        IsReadOnly="True"
+                        ItemsSource="{Binding EmailViewModel.CollectionMessage}">
+                        <DataGrid.Columns>
+                            <DataGridTextColumn Binding="{Binding IDEmail}" Header="№" />
+                            <DataGridTextColumn Width="*" Binding="{Binding DateSend}">
+                                <DataGridTextColumn.Header>
+                                    <TextBlock Text="{DynamicResource DateTimeEmail}" />
+                                </DataGridTextColumn.Header>
+                            </DataGridTextColumn>
+                            <DataGridTextColumn Width="4*" Binding="{Binding Subject}">
+                                <DataGridTextColumn.Header>
+                                    <TextBlock Text="{DynamicResource SubjectEmail}" />
+                                </DataGridTextColumn.Header>
+                            </DataGridTextColumn>
+                            <!--<DataGridTextColumn Width="*" Binding="{Binding StatusMessage}">
+                                <DataGridTextColumn.Header>
+                                    <TextBlock Text="{DynamicResource ResultSendEmail}" />
+                                </DataGridTextColumn.Header>
+                            </DataGridTextColumn>-->
+                            <DataGridTemplateColumn Width="2*">
+                                <DataGridTemplateColumn.Header>
+                                    <TextBlock Text="{DynamicResource ResultSendEmail}" />
+                                </DataGridTemplateColumn.Header>
+                                <DataGridTemplateColumn.CellTemplate>
+                                    <DataTemplate>
+                                        <StackPanel Orientation="Horizontal">
+                                            <StackPanel VerticalAlignment="Center" Orientation="Vertical">
+                                                <TextBlock Text="{Binding StatusMessage}" />
+                                                <TextBlock Text="{Binding SendMessage}" />
+                                            </StackPanel>
+                                            <Button
+                                                Height="20"
+                                                Margin="5"
+                                                Command="{Binding DataContext.EmailViewModel.CommandResending, ElementName=mainwin}"
+                                                CommandParameter="{Binding}"
+                                                ContentTemplate="{StaticResource DelFileCommand}"
+                                                ToolTip="{DynamicResource RemoveFile}" />
+                                        </StackPanel>
+                                    </DataTemplate>
+                                </DataGridTemplateColumn.CellTemplate>
+                            </DataGridTemplateColumn>
+                        </DataGrid.Columns>
+                    </DataGrid>
+                </Grid>
+            </TabItem>
+            <TabItem Header="{DynamicResource Settings}">
+                <Grid>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="*" />
+                        <RowDefinition Height="auto" />
+                    </Grid.RowDefinitions>
+                    <ScrollViewer Grid.Row="0">
+                        <StackPanel>
+                            <GroupBox Header="{DynamicResource MainSettings}">
+                                <StackPanel Orientation="Vertical">
+                                    <StackPanel Orientation="Horizontal">
+                                        <TextBlock VerticalAlignment="Center" Text="{DynamicResource LanguageApplication}" />
+                                        <ComboBox
+                                            Width="200"
+                                            Margin="10,0,0,0"
+                                            ItemsSource="{Binding LanguageViewModel.CollectionLanguage}"
+                                            SelectedItem="{Binding LanguageViewModel.CurrentLanguage}">
+                                            <ComboBox.ItemTemplate>
+                                                <DataTemplate>
+                                                    <StackPanel Orientation="Horizontal">
+                                                        <Image Height="20" Source="{Binding FlagLanguage}" />
+                                                        <TextBlock
+                                                            Margin="10,0,0,0"
+                                                            VerticalAlignment="Center"
+                                                            Text="{Binding NameLanguage}" />
+                                                    </StackPanel>
+                                                </DataTemplate>
+                                            </ComboBox.ItemTemplate>
+                                        </ComboBox>
+                                    </StackPanel>
+                                    <CheckBox
+                                        x:Name="chboxDisplayHelp"
+                                        Content="{DynamicResource DisplayHelp}"
+                                        IsChecked="{Binding SettingsViewModel.Settings.CanShowTabHelp}" />
+                                </StackPanel>
+                            </GroupBox>
+                            <GroupBox Header="{DynamicResource FormEmails}">
+                                <StackPanel Orientation="Vertical">
+                                    <CheckBox
+                                        x:Name="chboxCanChangeSubject"
+                                        Content="{DynamicResource CanChangeTextSubjectNextEmail}"
+                                        IsChecked="{Binding SettingsViewModel.Settings.CanChangeTextSubjectNextEmail}" />
+                                    <CheckBox
+                                        x:Name="chboxCanUseSignature"
+                                        Content="{DynamicResource UseSignature}"
+                                        IsChecked="{Binding SettingsViewModel.Settings.CanUseSignature}" />
+                                    <StackPanel
+                                        Margin="20,0,0,0"
+                                        Orientation="Vertical"
+                                        Visibility="{Binding IsChecked, Converter={StaticResource ConverterBoolToVisibility}, ElementName=chboxCanUseSignature}">
+                                        <CheckBox Content="{DynamicResource UseSignatureOnlyFirstEmail}" IsChecked="{Binding SettingsViewModel.Settings.CanUseSignatureOnlyFirstEmail}" />
+                                        <Expander Header="{DynamicResource Emailignatures}">
+                                            <Grid>
+                                                <Grid.ColumnDefinitions>
+                                                    <ColumnDefinition Width="auto" />
+                                                    <ColumnDefinition Width="*" />
+                                                </Grid.ColumnDefinitions>
+                                                <StackPanel
+                                                    Grid.Column="0"
+                                                    VerticalAlignment="Stretch"
+                                                    Orientation="Vertical">
+                                                    <TextBlock Text="{DynamicResource SelectSignatureUse}" />
+                                                    <Border BorderBrush="{DynamicResource AccentColorBrush}" BorderThickness="1">
+                                                        <ListView
+                                                            ItemTemplate="{StaticResource dtSignature}"
+                                                            ItemsSource="{Binding EmailSignatureViewModel.CollectionEmailSignature}"
+                                                            SelectedItem="{Binding EmailSignatureViewModel.CurrentEmailSignature}" />
+                                                    </Border>
+                                                    <Button Command="{Binding EmailSignatureViewModel.CommandCreateEmailSignature}" Content="{DynamicResource SignatureCreate}" />
+                                                </StackPanel>
+                                                <Grid Grid.Column="1" Visibility="{Binding EmailSignatureViewModel.CurrentEmailSignature, Converter={StaticResource ConverterNullToVisibility}}">
+                                                    <Grid.RowDefinitions>
+                                                        <RowDefinition Height="auto" />
+                                                        <RowDefinition Height="*" />
+                                                    </Grid.RowDefinitions>
+                                                    <Grid Grid.Row="0">
+                                                        <Grid.ColumnDefinitions>
+                                                            <ColumnDefinition Width="auto" />
+                                                            <ColumnDefinition Width="*" />
+                                                            <ColumnDefinition Width="auto" />
+                                                        </Grid.ColumnDefinitions>
+                                                        <StackPanel
+                                                            Grid.Column="0"
+                                                            Margin="10,0,0,0"
+                                                            HorizontalAlignment="Center"
+                                                            Orientation="Horizontal">
+                                                            <TextBlock VerticalAlignment="Center" Text="{DynamicResource SignaturePath}" />
+                                                            <TextBox
+                                                                Margin="5,0,0,0"
+                                                                IsReadOnly="True"
+                                                                Text="{Binding EmailSignatureViewModel.CurrentEmailSignature.Path}" />
+                                                        </StackPanel>
+                                                        <Button
+                                                            Grid.Column="1"
+                                                            Width="25"
+                                                            Height="25"
+                                                            Margin="10,0,0,0"
+                                                            Padding="2"
+                                                            HorizontalAlignment="Left"
+                                                            Command="{Binding FilesViewModel.CommandOpenFolderFile}"
+                                                            CommandParameter="{Binding EmailSignatureViewModel.CurrentEmailSignature.Path}"
+                                                            ContentTemplate="{StaticResource ImageFolder}"
+                                                            Cursor="Hand"
+                                                            ToolTip="{DynamicResource SignatureFolderOpen}" />
+                                                        <Button
+                                                            Grid.Column="2"
+                                                            Height="25"
+                                                            Margin="10,0,0,0"
+                                                            Command="{Binding DataContext.EmailSignatureViewModel.CommandRemoveEmailSignature, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type local:MainWindow}}}"
+                                                            Content="{StaticResource DelCommand}"
+                                                            ToolTip="{DynamicResource SignatureRemoveToolTip}"
+                                                            ToolTipService.ShowOnDisabled="True" />
+                                                    </Grid>
+
+                                                    <TextBox
+                                                        Grid.Row="1"
+                                                        MinLines="5"
+                                                        Style="{StaticResource TextBoxStyleMessageEmail}"
+                                                        Text="{Binding EmailSignatureViewModel.CurrentEmailSignatureText}" />
+                                                </Grid>
+                                            </Grid>
+                                        </Expander>
+                                    </StackPanel>
+                                </StackPanel>
+                            </GroupBox>
+                            <GroupBox Header="{DynamicResource FormFiles}">
+                                <StackPanel Orientation="Vertical">
+                                    <CheckBox
+                                        x:Name="chboxUsePassword"
+                                        Content="{DynamicResource UseIntegralArchiver}"
+                                        IsChecked="{Binding SettingsViewModel.Settings.CanUseIntegralArchiver}" />
+                                    <StackPanel
+                                        Margin="20,0,0,0"
+                                        Orientation="Vertical"
+                                        Visibility="{Binding IsChecked, Converter={StaticResource ConverterBoolToVisibility}, ElementName=chboxUsePassword}">
+                                        <Grid>
+                                            <Grid.ColumnDefinitions>
+                                                <ColumnDefinition Width="auto" />
+                                                <ColumnDefinition Width="*" />
+                                            </Grid.ColumnDefinitions>
+                                            <Grid.RowDefinitions>
+                                                <RowDefinition />
+                                                <RowDefinition />
+                                                <RowDefinition />
+                                            </Grid.RowDefinitions>
+                                            <TextBlock
+                                                Grid.Row="0"
+                                                Grid.Column="0"
+                                                VerticalAlignment="Center"
+                                                Text="{DynamicResource DefaultArchiverName}" />
+                                            <TextBox
+                                                Grid.Row="0"
+                                                Grid.Column="1"
+                                                Width="200"
+                                                Margin="5,0,0,0"
+                                                HorizontalAlignment="Left"
+                                                Text="{Binding SettingsViewModel.Settings.NameArchiveDefault}" />
+                                            <TextBlock
+                                                Grid.Row="1"
+                                                Grid.Column="0"
+                                                VerticalAlignment="Center"
+                                                Text="{DynamicResource SizePartSettings}" />
+                                            <TextBox
+                                                Grid.Row="1"
+                                                Grid.Column="1"
+                                                Width="100"
+                                                Margin="5,0,0,0"
+                                                HorizontalAlignment="Left"
+                                                Text="{Binding SettingsViewModel.Settings.SizePartArchive, UpdateSourceTrigger=PropertyChanged}"
+                                                Validation.ErrorTemplate="{StaticResource ValidationSizePart}" />
+                                            <TextBlock
+                                                Grid.Row="2"
+                                                Grid.Column="0"
+                                                VerticalAlignment="Center"
+                                                Text="{DynamicResource FolderTempArchiver}" />
+
+                                            <Grid Grid.Row="2" Grid.Column="1">
+                                                <Grid.ColumnDefinitions>
+                                                    <ColumnDefinition Width="*" />
+                                                    <ColumnDefinition Width="auto" />
+                                                </Grid.ColumnDefinitions>
+                                                <TextBox Margin="5,0,5,0" Text="{Binding SettingsViewModel.Settings.ArchiveTempFolder}" />
+                                                <Button
+                                                    Grid.Column="1"
+                                                    Width="25"
+                                                    Height="25"
+                                                    Padding="2"
+                                                    HorizontalAlignment="Right"
+                                                    Command="{Binding FilesViewModel.CommandOpenFolder}"
+                                                    CommandParameter="{Binding SettingsViewModel.Settings.ArchiveTempFolder}"
+                                                    ContentTemplate="{StaticResource ImageFolder}"
+                                                    Cursor="Hand"
+                                                    ToolTip="{DynamicResource FolderOpen}" />
+                                            </Grid>
+                                        </Grid>
+                                    </StackPanel>
+                                </StackPanel>
+                            </GroupBox>
+                            <GroupBox Header="{DynamicResource SettingsSendEmail}">
+                                <StackPanel Orientation="Vertical">
+                                    <StackPanel Orientation="Horizontal">
+                                        <TextBlock VerticalAlignment="Center" Text="{DynamicResource PauseSendEmail}" />
+                                        <TextBox
+                                            Width="50"
+                                            Margin="5,0,0,0"
+                                            Text="{Binding SettingsViewModel.Settings.TimeDelaySending}" />
+                                    </StackPanel>
+                                    <Grid>
+                                        <Grid.ColumnDefinitions>
+                                            <ColumnDefinition Width="Auto" />
+                                            <ColumnDefinition />
+                                        </Grid.ColumnDefinitions>
+                                        <StackPanel Grid.Column="0" Orientation="Vertical">
+                                            <CheckBox Content="{DynamicResource RequestDeliveryReport}" IsChecked="{Binding SettingsViewModel.Settings.CanRequestDeliveryReport}" />
+                                            <CheckBox Content="{DynamicResource RequestReadReport}" IsChecked="{Binding SettingsViewModel.Settings.CanRequestReadReport}" />
+                                        </StackPanel>
+                                        <StackPanel Grid.Column="1" Orientation="Vertical">
+                                            <CheckBox
+                                                Margin="5,0,0,0"
+                                                Content="{DynamicResource OnlyFirstEmail}"
+                                                IsChecked="{Binding SettingsViewModel.Settings.CanRequestDeliveryReportOnlyFirstEmail}" />
+                                            <CheckBox
+                                                Margin="5,0,0,0"
+                                                Content="{DynamicResource OnlyFirstEmail}"
+                                                IsChecked="{Binding SettingsViewModel.Settings.CanRequestReadReportOnlyFirstEmail}" />
+                                        </StackPanel>
+                                    </Grid>
+                                </StackPanel>
+                            </GroupBox>
+                        </StackPanel>
+                    </ScrollViewer>
+                    <Grid Grid.Row="1" Margin="0,2,0,0">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="auto" />
+                            <ColumnDefinition Width="*" />
+                            <ColumnDefinition Width="auto" />
+                        </Grid.ColumnDefinitions>
+                        <Button
+                            Grid.Column="0"
+                            Command="{Binding CommandSaveSettings}"
+                            Content="{DynamicResource SaveSettings}" />
+                        <Button
+                            Grid.Column="2"
+                            Command="{Binding CommandLoadDefaultSettings}"
+                            Content="{DynamicResource LoadSettingsDefault}" />
+                    </Grid>
+
+                </Grid>
+            </TabItem>
+            <TabItem Header="{DynamicResource Help}" Visibility="{Binding IsChecked, Converter={StaticResource ConverterBoolToVisibility}, ElementName=chboxDisplayHelp}" />
+        </TabControl>
+        <StatusBar Grid.Row="1" />
+        <Border
+            Grid.Row="0"
+            Width="{Binding Width, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type local:MainWindow}}}"
+            Height="{Binding Height, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type local:MainWindow}}}"
+            d:IsHidden="True"
+            Visibility="{Binding EmailSignatureViewModel.NewEmailSignature, Converter={StaticResource ConverterNullToVisibility}}">
+            <Border.Background>
+                <SolidColorBrush Opacity="0.5" Color="Black" />
+            </Border.Background>
+            <Border
+                Width="400"
+                HorizontalAlignment="Center"
+                VerticalAlignment="Center"
+                Background="White"
+                BorderBrush="{DynamicResource AccentColorBrush}"
+                BorderThickness="1">
+                <Grid>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="auto" />
+                        <RowDefinition Height="*" />
+                        <RowDefinition Height="auto" />
+                    </Grid.RowDefinitions>
+                    <StackPanel Grid.Row="2" Orientation="Horizontal">
+                        <Button Command="{Binding EmailSignatureViewModel.CommandSaveEmailSignature}" Content="save" />
+                        <Button Command="{Binding EmailSignatureViewModel.CommandCloseEmailSignature}" Content="close" />
+                    </StackPanel>
+                    <TextBox
+                        Grid.Row="1"
+                        Height="150"
+                        Style="{StaticResource TextBoxStyleMessageEmail}"
+                        Text="{Binding EmailSignatureViewModel.NewEmailSignatureText}" />
+                    <StackPanel
+                        Grid.Row="0"
+                        Margin="5"
+                        Orientation="Horizontal">
+                        <TextBlock VerticalAlignment="Center" Text="Name" />
+                        <TextBox
+                            Name="txtBoxNameNewSignature"
+                            Width="330"
+                            Margin="10,0,0,0"
+                            Text="{Binding EmailSignatureViewModel.NewEmailSignature.Name, UpdateSourceTrigger=PropertyChanged}">
+                            <TextBox.Style>
+                                <Style TargetType="TextBox">
+                                    <Style.Triggers>
+                                        <DataTrigger Binding="{Binding EmailSignatureViewModel.NewEmailSignature, Converter={StaticResource ConverterNullToBool}}" Value="true">
+                                            <Setter Property="FocusManager.FocusedElement" Value="{Binding RelativeSource={RelativeSource Self}}" />
+                                        </DataTrigger>
+                                    </Style.Triggers>
+                                </Style>
+                            </TextBox.Style>
+                        </TextBox>
+                    </StackPanel>
+                </Grid>
+            </Border>
+        </Border>
+    </Grid>
+</Controls:MetroWindow>

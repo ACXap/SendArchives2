@@ -1,0 +1,97 @@
+﻿<ResourceDictionary
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:sys="clr-namespace:System;assembly=mscorlib">
+    <!--  LanguageInfo  -->
+    <sys:String x:Key="NameLanguage">Русский</sys:String>
+    <sys:String x:Key="KeyLanguage">ru</sys:String>
+
+    <!--  Resourses MainWindow string  -->
+    <sys:String x:Key="TitleMainWindow">Отправка многотомных архивов</sys:String>
+    <sys:String x:Key="FormEmails">Формирование писем</sys:String>
+    <sys:String x:Key="FormFiles">Формирование файлов</sys:String>
+    <sys:String x:Key="Result">Результаты</sys:String>
+    <sys:String x:Key="Settings">Настройки</sys:String>
+    <sys:String x:Key="Help">Помощь</sys:String>
+    <sys:String x:Key="MainWindowMinimize">Свернуть</sys:String>
+    <sys:String x:Key="MainWindowMaximize">Развернуть</sys:String>
+    <sys:String x:Key="MainWindowRestore">Восстановить</sys:String>
+    <sys:String x:Key="MainWindowClose">Закрыть</sys:String>
+    <!--  FormEmails string  -->
+    <sys:String x:Key="SendEmail">Отправить</sys:String>
+    <sys:String x:Key="ToEmail">Кому</sys:String>
+    <sys:String x:Key="ToEmailWatermark">Адресаты писем через ;</sys:String>
+    <sys:String x:Key="SubjectEmail">Тема</sys:String>
+    <sys:String x:Key="FirstEmail">Первое письмо</sys:String>
+    <sys:String x:Key="NextEmail">Последующие письма</sys:String>
+    <sys:String x:Key="SubjectEmailWatermark">Тема первого письма + добавится &quot;Письмо 1 из х&quot; (по умолчанию: Письмо 1 из х)</sys:String>
+    <sys:String x:Key="Signature">Подпись</sys:String>
+    <sys:String x:Key="SubjectNextEmailWatermark">Тема последующих писем + добавится &quot;Письмо х из х&quot; (по умолчанию: Письмо х из х)</sys:String>
+    <sys:String x:Key="MessageFirstEmail">Сопроводительный текст первого письма</sys:String>
+    <sys:String x:Key="MessageFirstEmailWatermark">Сопроводительный текст первого письма. По умолчанию: Письмо 1 из х + подпись, если указана</sys:String>
+    <sys:String x:Key="MessageNextEmail">Сопроводительный текст последующих писем</sys:String>
+    <sys:String x:Key="MessageNextEmailWatermark">Сопроводительный текст последующих писем. По умолчанию: Письмо х из х</sys:String>
+    <!--  FormFiles string  -->
+    <sys:String x:Key="ListFiles">Список файлов</sys:String>
+    <sys:String x:Key="NameFile">Имя файла</sys:String>
+    <sys:String x:Key="PathFile">Путь файла</sys:String>
+    <sys:String x:Key="SizeFile">Размер (Кб)</sys:String>
+    <sys:String x:Key="SizeKb">Кб</sys:String>
+    <sys:String x:Key="SizeMb">Мб</sys:String>
+    <sys:String x:Key="UnGroup">Разгруппировать файлы</sys:String>
+    <sys:String x:Key="OpenRepositoryFile">Открыть место хронения</sys:String>
+    <sys:String x:Key="RemoveFile">Удалить файл из списка</sys:String>
+    <sys:String x:Key="SelectFiles">Выбрать файлы</sys:String>
+    <sys:String x:Key="ClearList">Очистить список</sys:String>
+    <sys:String x:Key="TotalFiles">Всего файлов</sys:String>
+    <sys:String x:Key="TotalGroup">Всего будет писем</sys:String>
+    <sys:String x:Key="TotalSize">Общий объем</sys:String>
+    <sys:String x:Key="FormArchives">Формирование архива</sys:String>
+    <sys:String x:Key="NameArchive">Имя архива</sys:String>
+    <sys:String x:Key="Password">Пароль</sys:String>
+    <sys:String x:Key="SizePart">Размер части (мб)</sys:String>
+    <sys:String x:Key="SizePartErrorFormat">Неверное значение размера части</sys:String>
+    <sys:String x:Key="FormArchivesButton">Сформировать</sys:String>
+    <sys:String x:Key="FormCancelArchivesButton">Отменить</sys:String>
+    <sys:String x:Key="GroupFile">Группировать файлы</sys:String>
+    <sys:String x:Key="GroupFileDescription">Группировать файлы по письмам без архивирования</sys:String>
+    <sys:String x:Key="MaxSizeLatter">Максимальный размер (мб)</sys:String>
+
+    <!--  Result string  -->
+    <sys:String x:Key="CancelSendEmail">Отменить отправку</sys:String>
+    <sys:String x:Key="DateTimeEmail">Дата и время</sys:String>
+    <sys:String x:Key="EmailSubject">Письмо - тема</sys:String>
+    <sys:String x:Key="ResultSendEmail">Результат</sys:String>
+    <sys:String x:Key="Processed">Обработано</sys:String>
+    <sys:String x:Key="ProcessedOf">из</sys:String>
+    <!--  Settings string  -->
+    <sys:String x:Key="CanChangeTextSubjectNextEmail">Позволить изменять текст и тему последующих писем</sys:String>
+    <sys:String x:Key="UseSignature">Использовать подпись</sys:String>
+    <sys:String x:Key="UseSignatureOnlyFirstEmail">Вставлять подпись только в первое письмо</sys:String>
+    <sys:String x:Key="Emailignatures">Подписи</sys:String>
+    <sys:String x:Key="SelectSignatureUse">Выбрать подпись для использования</sys:String>
+    <sys:String x:Key="SignatureName">Имя</sys:String>
+    <sys:String x:Key="SignaturePath">Путь</sys:String>
+    <sys:String x:Key="SignatureCreate">Создать</sys:String>
+    <sys:String x:Key="SignatureSave">Сохранить</sys:String>
+    <sys:String x:Key="SignatureRemove">Удалить</sys:String>
+    <sys:String x:Key="SignatureFolderOpen">Открыть место расположения</sys:String>
+    <sys:String x:Key="SignatureRemoveToolTip" xml:space="preserve">Удалить выбранную подпись.&#x0a;Удалить можно только подписи созданные в этой программе (для защиты от вас)</sys:String>
+    <sys:String x:Key="UseIntegralArchiver">Использовать встроенный архиватор</sys:String>
+    <sys:String x:Key="DefaultArchiverName">Имя архива по умолчанию</sys:String>
+    <sys:String x:Key="PasswordRandom">Cлучайный пароль</sys:String>
+    <sys:String x:Key="SizePartSettings">Размер части архива (мб)</sys:String>
+    <sys:String x:Key="FolderTempArchiver">Временная папка для архива</sys:String>
+    <sys:String x:Key="FolderOpen">Открыть папку</sys:String>
+    <sys:String x:Key="SettingsSendEmail">Отправка писем</sys:String>
+    <sys:String x:Key="PauseSendEmail">Задержка между отправками писем (сек)</sys:String>
+    <sys:String x:Key="RequestDeliveryReport">Запрашивать отчет о доставке</sys:String>
+    <sys:String x:Key="RequestReadReport">Запрашивать отчет о прочтении</sys:String>
+    <sys:String x:Key="OnlyFirstEmail">Только для первого письма</sys:String>
+    <sys:String x:Key="MainSettings">Основные настройки</sys:String>
+    <sys:String x:Key="DisplayHelp">Отображать вкладку &quot;Помощь&quot;</sys:String>
+    <sys:String x:Key="LanguageApplication">Язык программы</sys:String>
+    <sys:String x:Key="SaveSettings">Сохранить</sys:String>
+    <sys:String x:Key="LoadSettingsDefault">По умолчанию</sys:String>
+
+</ResourceDictionary>

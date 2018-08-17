@@ -1,0 +1,168 @@
+﻿<Application
+    x:Class="SendArchives.App"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:Controls="clr-namespace:MahApps.Metro.Controls;assembly=MahApps.Metro"
+    xmlns:ese="clr-namespace:SendArchives.EmailSignature.Enumerations;assembly=SendArchives.EmailSignature"
+    Exit="Application_Exit"
+    ShutdownMode="OnMainWindowClose"
+    Startup="Application_Startup">
+    <Application.Resources>
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <!--  MahApps.Metro resource dictionaries. Make sure that all file names are Case Sensitive!  -->
+                <ResourceDictionary Source="pack://application:,,,/MahApps.Metro;component/Styles/Controls.xaml" />
+                <ResourceDictionary Source="pack://application:,,,/MahApps.Metro;component/Styles/Fonts.xaml" />
+                <ResourceDictionary Source="pack://application:,,,/MahApps.Metro;component/Styles/Colors.xaml" />
+                <!--  Accent and AppTheme setting  -->
+                <ResourceDictionary Source="pack://application:,,,/MahApps.Metro;component/Styles/Accents/Blue.xaml" />
+                <ResourceDictionary Source="pack://application:,,,/MahApps.Metro;component/Styles/Accents/BaseLight.xaml" />
+
+                <ResourceDictionary Source="RuDefault.xaml" />
+                <ResourceDictionary Source="LanguagesDictionaries.xaml" />
+            </ResourceDictionary.MergedDictionaries>
+
+            <!--  Resourses MainWindow  -->
+            <Path
+                x:Key="ProgramIcon"
+                Data="M0 695 l0 -695 218 0 217 0 130 282 131 282 58 3 c32 2 70 10 85 18 28 14 73 60 102 104 l15 24 305 -27 c167 -15 305 -29 306 -30 2 -1 -249 -148 -557 -325 -308 -178 -560 -325 -560 -327 0 -2 259 -4 575 -4 l575 0 0 359 0 360 -42 5 c-24 4 -149 15 -278 26 -129 11 -249 23 -266 25 l-32 6 129 276 c70 151 130 277 131 279 2 1 60 -97 131 -219 70 -122 150 -260 177 -307 l50 -85 0 333 0 332 -800 0 -800 0 0 -695z m1187 678 c-3 -5 -62 -132 -132 -283 -199 -431 -206 -442 -267 -455 -41 -9 -779 57 -775 69 4 12 1147 675 1165 675 7 1 11 -2 9 -6z m-857 -773 c129 -11 249 -23 266 -25 l32 -6 -128 -275 c-71 -152 -130 -277 -132 -279 -2 -2 -70 112 -151 253 -81 141 -161 281 -179 310 l-31 54 44 -6 c24 -3 150 -15 279 -26z"
+                Fill="Black"
+                Stretch="Uniform" />
+            <Path
+                x:Key="OutlookIcon"
+                HorizontalAlignment="Center"
+                VerticalAlignment="Center"
+                Data="M11329,5495 L8930,7218 C8797,7313 8591,7337 8429,7208.0001 L7832,6798.9999 7834,9666 11078,9666 C11348,9666 11333,9615 11334,9354 z M4455.0332,5421.5264 C3921.6699,5436.4844 3376.0313,6058.4375 3588,7126 3865,8522 5617,8183 5286,6295 5179.1563,5685.2188 4819.9668,5411.292 4455.0332,5421.5264 z M4463,4956 C5396,4956 5818,5737 5818,6701.9999 5818,7449 5533,8039 5060,8301 4398,8668 3643,8338 3366,7906 2677,6830 3072,4956 4463,4956 z M10697.797,4726.5781 C10671.813,4726.625 10645.5,4726.75 10619,4727 L7832,4727 7832,6173 8455,6637 C8643,6791 8773,6771 8951,6641 L10971,5171 C11276,4949 11589,4724 10919,4727 10850.75,4727 10775.75,4726.4375 10697.797,4726.5781 z M7832,3986 L7832,4445 11642,4445 11642,8184 C11642,8193 11643,8208 11643,8220.0001 11642,8412 11642,8466 11854,8466 12065,8466 12065,8404 12065,8205 12065,8198 12065,8191 12065,8184 L12065,4442 C12065,4127 12065,3986 11644,3986 z M7558,1570 L1421,2681 1421,10618 7558,11730 z M13494,0 L13493,13476 0,13476 0,1 z"
+                Fill="#007fff"
+                Stretch="Uniform" />
+
+            <DataTemplate x:Key="MainIcon">
+                <ContentControl Content="{StaticResource ProgramIcon}" />
+            </DataTemplate>
+
+            <Path
+                x:Key="DelCommand"
+                Data="M55,0 L85,0 85,55 140,55 140,85 85,85 85,140 55,140 55,85 0,85 0,55 55,55 z"
+                Fill="Red"
+                RenderTransformOrigin="0.5,0.5"
+                Stretch="Uniform">
+                <Path.RenderTransform>
+                    <TransformGroup>
+                        <ScaleTransform />
+                        <SkewTransform />
+                        <RotateTransform Angle="-45" />
+                        <TranslateTransform />
+                    </TransformGroup>
+                </Path.RenderTransform>
+            </Path>
+
+            <DataTemplate x:Key="DelFileCommand">
+                <Path
+                    Data="M55,0 L85,0 85,55 140,55 140,85 85,85 85,140 55,140 55,85 0,85 0,55 55,55 z"
+                    Fill="Red"
+                    RenderTransformOrigin="0.5,0.5"
+                    Stretch="Uniform">
+                    <Path.RenderTransform>
+                        <TransformGroup>
+                            <ScaleTransform />
+                            <SkewTransform />
+                            <RotateTransform Angle="-45" />
+                            <TranslateTransform />
+                        </TransformGroup>
+                    </Path.RenderTransform>
+                </Path>
+            </DataTemplate>
+
+            <DataTemplate x:Key="dtSignature">
+                <StackPanel Orientation="Horizontal">
+                    <ContentControl x:Name="IconSignature" Height="20" />
+                    <TextBlock
+                        Margin="5"
+                        VerticalAlignment="Center"
+                        Text="{Binding Name}" />
+                </StackPanel>
+                <DataTemplate.Triggers>
+                    <DataTrigger Binding="{Binding TypeSignature}" Value="{x:Static ese:TypeSignature.Their}">
+                        <Setter TargetName="IconSignature" Property="ContentTemplate">
+                            <Setter.Value>
+                                <DataTemplate>
+                                    <Path
+                                        Data="M0 695 l0 -695 218 0 217 0 130 282 131 282 58 3 c32 2 70 10 85 18 28 14 73 60 102 104 l15 24 305 -27 c167 -15 305 -29 306 -30 2 -1 -249 -148 -557 -325 -308 -178 -560 -325 -560 -327 0 -2 259 -4 575 -4 l575 0 0 359 0 360 -42 5 c-24 4 -149 15 -278 26 -129 11 -249 23 -266 25 l-32 6 129 276 c70 151 130 277 131 279 2 1 60 -97 131 -219 70 -122 150 -260 177 -307 l50 -85 0 333 0 332 -800 0 -800 0 0 -695z m1187 678 c-3 -5 -62 -132 -132 -283 -199 -431 -206 -442 -267 -455 -41 -9 -779 57 -775 69 4 12 1147 675 1165 675 7 1 11 -2 9 -6z m-857 -773 c129 -11 249 -23 266 -25 l32 -6 -128 -275 c-71 -152 -130 -277 -132 -279 -2 -2 -70 112 -151 253 -81 141 -161 281 -179 310 l-31 54 44 -6 c24 -3 150 -15 279 -26z"
+                                        Fill="#007fff"
+                                        Stretch="Uniform" />
+                                </DataTemplate>
+                            </Setter.Value>
+                        </Setter>
+                    </DataTrigger>
+                    <DataTrigger Binding="{Binding TypeSignature}" Value="{x:Static ese:TypeSignature.Outlook}">
+                        <Setter TargetName="IconSignature" Property="ContentTemplate">
+                            <Setter.Value>
+                                <DataTemplate>
+                                    <Path
+                                        Data="M11329,5495 L8930,7218 C8797,7313 8591,7337 8429,7208.0001 L7832,6798.9999 7834,9666 11078,9666 C11348,9666 11333,9615 11334,9354 z M4455.0332,5421.5264 C3921.6699,5436.4844 3376.0313,6058.4375 3588,7126 3865,8522 5617,8183 5286,6295 5179.1563,5685.2188 4819.9668,5411.292 4455.0332,5421.5264 z M4463,4956 C5396,4956 5818,5737 5818,6701.9999 5818,7449 5533,8039 5060,8301 4398,8668 3643,8338 3366,7906 2677,6830 3072,4956 4463,4956 z M10697.797,4726.5781 C10671.813,4726.625 10645.5,4726.75 10619,4727 L7832,4727 7832,6173 8455,6637 C8643,6791 8773,6771 8951,6641 L10971,5171 C11276,4949 11589,4724 10919,4727 10850.75,4727 10775.75,4726.4375 10697.797,4726.5781 z M7832,3986 L7832,4445 11642,4445 11642,8184 C11642,8193 11643,8208 11643,8220.0001 11642,8412 11642,8466 11854,8466 12065,8466 12065,8404 12065,8205 12065,8198 12065,8191 12065,8184 L12065,4442 C12065,4127 12065,3986 11644,3986 z M7558,1570 L1421,2681 1421,10618 7558,11730 z M13494,0 L13493,13476 0,13476 0,1 z"
+                                        Fill="#007fff"
+                                        Stretch="Uniform" />
+                                </DataTemplate>
+                            </Setter.Value>
+                        </Setter>
+                    </DataTrigger>
+                </DataTemplate.Triggers>
+            </DataTemplate>
+
+            <Style x:Key="TextBlockStyleEmail" TargetType="{x:Type TextBlock}">
+                <Setter Property="FontSize" Value="18" />
+                <Setter Property="HorizontalAlignment" Value="Center" />
+                <Setter Property="VerticalAlignment" Value="Center" />
+                <Setter Property="FontWeight" Value="Bold" />
+            </Style>
+            <Style
+                x:Key="TextBoxStyleEmail"
+                BasedOn="{StaticResource MetroTextBox}"
+                TargetType="{x:Type TextBox}">
+                <Setter Property="Margin" Value="0,4,0,4" />
+                <Setter Property="VerticalContentAlignment" Value="Center" />
+                <Setter Property="Controls:TextBoxHelper.ClearTextButton" Value="True" />
+            </Style>
+            <Style
+                x:Key="TextBoxStyleMessageEmail"
+                BasedOn="{StaticResource TextBoxStyleEmail}"
+                TargetType="{x:Type TextBox}">
+                <Setter Property="AcceptsReturn" Value="True" />
+                <Setter Property="VerticalScrollBarVisibility" Value="Auto" />
+                <Setter Property="TextWrapping" Value="Wrap" />
+                <Setter Property="VerticalContentAlignment" Value="Top" />
+                <Setter Property="Margin" Value="0,1,0,1" />
+            </Style>
+
+
+            <Path
+                x:Key="ImageRandomPassword"
+                Data="M33.8,38.6 C33.5,38.6 33.3,38.7 33,38.8 31.3,38.8 29.9,41.9 29.9,44.2 29.9,46.5 31.3,47.9 33,47.2 34.7,46.5 36.1,44.1 36.1,41.8 36.1,39.9 35.1,38.6 33.8,38.6 z M18.2,38.5 C16.9,38.5 15.9,39.7 15.9,41.7 15.9,44 17.3,46.4 19,47.1 20.7,47.8 22.1,46.5 22.1,44.2 22.1,41.9 20.7,38.8 19,38.8 L19,38.7 C18.7,38.6 18.5,38.5 18.2,38.5 z M12.2,26.3 C10.9,26.3 9.9,27.5 9.9,29.5 9.9,31.8 11.3,34.2 13,34.9 14.7,35.587948 16.099998,34.187946 16.099998,31.887943 16.099998,29.587948 14.700001,26.487942 13,26.487942 12.734375,26.394192 12.476074,26.346828 12.229294,26.342419 z M4.2292938,14.948605 C2.8966789,14.944973 1.8999996,16.231693 1.8999996,18.087948 1.8999996,20.387943 3.2999992,22.787945 5,23.487942 6.7000008,24.087948 8.0999985,22.787945 8.0999985,20.487942 8.0999985,18.187946 6.7000008,15.087948 5,15.087948 4.734375,14.994198 4.4760742,14.949276 4.2292938,14.948605 z M45.770706,13.842419 C45.523926,13.846828 45.265625,13.894192 45,13.987942 43.300003,13.987942 41.900002,17.087948 41.900002,19.387943 41.900002,21.687946 43.300003,22.987942 45,22.387943 46.699997,21.687946 48.099998,19.287945 48.099998,16.987942 48.099998,15.047321 47.103317,13.818607 45.770706,13.842419 z M3.5359631,10.796146 C4.0015621,10.787945 4.4937496,10.881695 5,11.087948 L5,10.987942 20,16.987942 C22.799999,18.087948 25,21.987942 25,25.687946 L25,45.887943 C25,49.587948 22.700001,51.687946 20,50.587948 L5,44.687946 C2.2000008,43.587948 0,39.687946 0,35.987942 L0,15.787945 C0,12.781696 1.5183582,10.831692 3.5359631,10.796146 z M48.16404,10.296146 C50.181641,10.331692 51.699997,12.281696 51.699997,15.287945 L51.699997,35.487942 C51.699997,39.087948 49.5,42.987942 46.699997,44.087948 L31.700001,49.987942 C29,51.087948 26.700001,48.987942 26.700001,45.287945 L26.700001,25.087948 C26.700001,21.387943 28.900002,17.487942 31.700001,16.387943 L46.699997,10.487942 46.699997,10.587948 C47.206245,10.381695 47.698433,10.287945 48.16404,10.296146 z M26.448071,6.8777657 C24.947655,6.8570862 23.237499,7.1879463 22,7.1879463 20.200001,7.8879433 20.200001,8.8879433 21.900002,9.5879478 23.599998,10.287945 26.400002,10.287945 28.200001,9.5879478 30,8.8879433 30,7.8879433 28.299999,7.1879463 27.768749,6.9691963 27.130077,6.8871651 26.448071,6.8777657 z M26.337498,0.00044631958 C28.149998,-0.012054443 29.949997,0.23794556 31.299999,0.78794479 L46.199997,6.587944 C48.900002,7.587944 48.800003,9.2879448 46,10.387943 L30.700001,16.087948 C27.900002,17.087948 23.400002,17.087948 20.700001,16.087948 L5.8999996,10.387943 C3.2000008,9.3879433 3.2000008,8.3879433 5.8999996,6.6879463 L6,6.4879456 21.299999,0.78794479 C22.699997,0.28794479 24.5,0 26.3,0 z"
+                Fill="Black"
+                Stretch="Uniform" />
+
+            <DataTemplate x:Key="ImageFolder">
+                <Path
+                    Data="M31.672 48.7l49.9 0 7.8 16.8 38 0 0 12.1 -95.8 0 0 -28.9zm-6.8 94.3l107.9 0 7.9 -65.4 -13.3 0 -95.8 0 -14.7 0 7.9 65.4z"
+                    Stretch="Uniform"
+                    Stroke="Black"
+                    StrokeThickness="2" />
+            </DataTemplate>
+
+            <ControlTemplate x:Key="ValidationSizePart">
+                <StackPanel Orientation="Vertical">
+                    <Border BorderBrush="Red" BorderThickness="2">
+                        <AdornedElementPlaceholder x:Name="textBox" />
+                    </Border>
+                    <Border Background="Black">
+                        <TextBlock
+                            Margin="5"
+                            Foreground="Red"
+                            Text="{DynamicResource SizePartErrorFormat}" />
+                    </Border>
+                </StackPanel>
+            </ControlTemplate>
+
+        </ResourceDictionary>
+    </Application.Resources>
+</Application>
